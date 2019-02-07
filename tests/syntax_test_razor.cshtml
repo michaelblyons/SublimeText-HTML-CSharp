@@ -1,0 +1,97 @@
+// SYNTAX TEST "Packages/HTML (C#)/razor.sublime-syntax"
+<html>
+<head></head>
+<body>
+    <p>Thanks to <a href="http://haacked.com/archive/2011/01/06/razor-syntax-quick-reference.aspx/">Phil Haack</a></p>
+
+    @{
+//  ^^    punctuation.section.embedded.begin.razor
+//    ^^  source.cs.embedded.html
+      int x = 123;
+      string y = "because.";
+    }
+//  ^     punctuation.section.embedded.end.razor
+//   ^^ - source.cs.embedded.html
+
+    @{
+//  ^^    punctuation.section.embedded.begin.razor
+//    ^^  source.cs.embedded.html
+        {
+            int x = 123;
+            string nestingBraces = "shouldn't break scope (but right now it does)";
+        }
+    }
+//  ^     punctuation.section.embedded.end.razor
+//   ^^ - source.cs.embedded.html
+
+    <span>@model.Message</span>
+
+    <span>
+    @Html.Raw(model.Message)
+    </span>
+
+    @foreach(var item in items) {
+//  ^ punctuation.section.embedded.begin.razor
+//   ^^^^^^^^^^^^^^^^^^^^^^^^^^^  source.cs.embedded.html
+//    ^^^^^^                      keyword.control.source.cs
+//                              ^ punctuation.definition.block.cs
+      <span>@item.Prop</span>
+    }
+
+    @if (foo) {
+//  ^           punctuation.section.embedded.begin.razor
+//   ^^^^^^^^^  source.cs.embedded.html
+//   ^^         keyword.control.source.cs
+//            ^ punctuation.definition.block.cs
+      <text>Plain Text</text>
+    }
+
+    @ using (Html.BeginForm()) {
+//  ^ punctuation.section.embedded.begin.razor
+//    ^^^^^^^^^^^^^^^^^^^^^^^^^  source.cs.embedded.html
+//    ^^^^^                      keyword.other.using.source.cs
+//                             ^ punctuation.definition.block.cs
+      <input type="text" value="input here">
+    }
+
+    @if (foo) {
+      @:Plain Text is @bar
+//    ^^                    constant.character.escape.razor
+    }
+
+    <span>ISBN@(isbnNumber)</span>
+
+    <span>@@foo is literal</span>
+//        ^^    constant.character.escape.razor
+//        ^^^^^ - source.cs.embedded.html
+
+    @*
+//  ^^     comment.block.begin.razor
+//    ^^^^ comment.block.razor
+    This is a server side
+    multiline comment
+    *@
+//  ^^    comment.block.end.razor
+//    ^^^ - comment.block.razor
+
+    @(MyClass.MyMethod<AType>())
+
+    @{
+      Func<dynamic, object> b = @<strong>@item</strong>;
+    }
+    @b("Bold this")
+
+    Hello @title. @name.
+
+    <div class="@className"></div>
+
+    <div class="@className foo bar"></div>
+
+    <div data-x="@xpos"></div>
+
+    <input type="checkbox" checked="@isChecked" />
+
+    <script src="~/myscript.js">
+    </script>
+</body>
+</html>

@@ -6,7 +6,6 @@ file_extensions:
   - aspx
   - ascx
   - asax
-  - cshtml
   - master
 scope: embedding.cshtml
 contexts:

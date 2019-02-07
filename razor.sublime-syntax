@@ -1,0 +1,67 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: Razor
+file_extensions:
+  - cshtml
+scope: embedding.razor
+contexts:
+  main:
+    - include: html
+
+  html:
+    - match: ''
+      set: scope:text.html.basic
+      with_prototype:
+        - include: comment
+        - include: escape
+        - include: block
+        - include: if-foreach-using
+
+  comment:
+    - match: '@\*'
+      scope: comment.block.begin.razor
+      push:
+        - meta_scope: comment.block.razor
+        - match: '\*@'
+          scope: comment.block.end.razor
+          pop: true
+
+  escape:
+    - match: '@[@:]'
+      scope: constant.character.escape.razor
+
+  if-foreach-using:
+    - match: '(@)\s*(?:(if|foreach)|(using))\b'
+      captures:
+        1: punctuation.section.embedded.begin.razor
+        2: keyword.control.source.cs
+        3: keyword.other.using.source.cs
+      push:
+        - meta_scope: source.cs.embedded.html
+        - match: '{'
+          pop: true
+          scope: punctuation.definition.block.cs
+        - match: ''
+          push:
+            - include: scope:source.cs
+          with_prototype:
+            - match: '(?=\{)'
+              pop: true
+
+  block:
+    - match: '@\s*\{'
+      scope: punctuation.section.embedded.begin.razor
+      push:
+        - meta_content_scope: source.cs.embedded.html
+        - match: '}'
+          scope: punctuation.section.embedded.end.razor
+          pop: true
+        - match: ''
+          push:
+            - include: scope:source.cs
+          with_prototype:
+            - match: '(?=})'
+              pop: true
+            - match: '@[^;]+'
+              scope: string.unquoted.razor
